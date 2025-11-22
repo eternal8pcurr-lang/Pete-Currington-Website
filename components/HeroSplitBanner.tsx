@@ -105,13 +105,49 @@ export default function HeroSplitBanner(props: HeroSplitBannerProps) {
     color: accentColor,
   };
 
-  // Normalize socialLinks so we always work with an array. Plasmic may pass
-  // an object or keyed map when editing; convert to values if necessary.
-  const links: SocialLink[] = Array.isArray(socialLinks)
-    ? socialLinks
-    : socialLinks && typeof socialLinks === "object"
-    ? (Object.values(socialLinks) as SocialLink[])
-    : [];
+  // Normalize socialLinks robustly so we always work with an array. Plasmic
+  // can pass arrays, objects keyed by index, JSON strings, or objects with
+  // an `items` array. Handle all common shapes defensively.
+  function normalizeSocialLinks(input: any): SocialLink[] {
+    if (!input) return [];
+    // If already an array, return shallow-copied array of objects.
+    if (Array.isArray(input)) {
+      return input
+        .map((it) => (typeof it === "string" ? tryParseJson(it) : it))
+        .filter(isObject) as SocialLink[];
+    }
+    // If it's a string, try to parse JSON (Plasmic sometimes serializes props).
+    if (typeof input === "string") {
+      const parsed = tryParseJson(input);
+      return normalizeSocialLinks(parsed);
+    }
+    // If it's an object and has an `items` array (common shape), use that.
+    if (input && typeof input === "object") {
+      if (Array.isArray(input.items)) return normalizeSocialLinks(input.items);
+
+      // If object is array-like (numeric keys), gather numeric-key values.
+      const keys = Object.keys(input);
+      const isNumericKeys = keys.length > 0 && keys.every((k) => /^\d+$/.test(k));
+      const vals = isNumericKeys ? keys.map((k) => input[k]) : Object.values(input);
+      return vals.map((it) => (typeof it === "string" ? tryParseJson(it) : it)).filter(isObject) as SocialLink[];
+    }
+    return [];
+  }
+
+  function tryParseJson(s: any) {
+    if (typeof s !== "string") return s;
+    try {
+      return JSON.parse(s);
+    } catch (e) {
+      return s;
+    }
+  }
+
+  function isObject(v: any): v is Record<string, any> {
+    return v !== null && typeof v === "object" && !Array.isArray(v);
+  }
+
+  const links: SocialLink[] = normalizeSocialLinks(socialLinks);
 
   return (
     <section
