@@ -1,0 +1,161 @@
+.container {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 420px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.imageColumn {
+  position: relative;
+  overflow: hidden;
+}
+
+.left {
+  flex: 0 0 40%;
+}
+
+.right {
+  flex: 0 0 60%;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rightColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 56px;
+  box-sizing: border-box;
+}
+
+.content {
+  max-width: 720px;
+  width: 100%;
+}
+
+.name {
+  margin: 0 0 12px 0;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.tagline {
+  margin: 0 0 18px 0;
+  font-size: 1.125rem;
+  color: inherit;
+  opacity: 0.9;
+}
+
+.socials {
+  display: flex;
+  gap: 12px;
+  margin: 8px 0 18px 0;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.socialLink:hover,
+.socialLink:focus {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(0,0,0,0.06);
+  margin: 20px 0;
+  width: 100%;
+}
+
+.bio {
+  margin: 0;
+  font-size: 1rem;
+  color: inherit;
+  opacity: 0.95;
+}
+
+.rawSvg {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 1023px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .imageColumn {
+    width: 100%;
+    flex: none;
+    min-height: 220px;
+  }
+
+  .imageWrapper {
+    min-height: 220px;
+  }
+
+  .rightColumn {
+    padding: 24px;
+    align-items: flex-start;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+
+  .name {
+    font-size: 1.8rem;
+  }
+
+  .socials {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .socialLink {
+    width: 48px;
+    height: 48px;
+  }
+}

@@ -23,3 +23,34 @@ export const PLASMIC = initPlasmicLoader({
 // https://docs.plasmic.app/learn/app-hosting/#set-a-plasmic-project-to-use-your-app-host
 
 // PLASMIC.registerComponent(...);
+// @ts-ignore - local code component
+import HeroSplitBanner from "./components/HeroSplitBanner";
+
+PLASMIC.registerComponent(HeroSplitBanner, {
+  name: "HeroSplitBanner",
+  importPath: "./components/HeroSplitBanner",
+  props: {
+    profileImage: { type: "string" },
+    profileImageAlt: { type: "string" },
+    name: { type: "string" },
+    tagline: { type: "string" },
+    bioText: { type: "string" },
+    socialLinks: {
+      type: "array",
+      of: {
+        type: "object",
+        fields: {
+          platform: { type: "string" },
+          url: { type: "string" },
+          icon: { type: "string" },
+        },
+      },
+    },
+    backgroundColor: { type: "string" },
+    textColor: { type: "string" },
+    accentColor: { type: "string" },
+    overlayOpacity: { type: "number" },
+    photoPosition: { type: "choice", options: ["left", "right"] },
+    showBio: { type: "boolean" },
+  },
+});
