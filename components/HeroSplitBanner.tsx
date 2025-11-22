@@ -39,10 +39,27 @@ const defaultIcons: Record<string, JSX.Element> = {
       <path d="M24 4.557a9.83 9.83 0 01-2.828.775A4.932 4.932 0 0023.337 3a9.864 9.864 0 01-3.127 1.195 4.916 4.916 0 00-8.384 4.482A13.94 13.94 0 011.671 3.149a4.916 4.916 0 001.523 6.574 4.897 4.897 0 01-2.229-.616c-.054 2.281 1.581 4.415 3.949 4.89a4.935 4.935 0 01-2.224.084 4.919 4.919 0 004.588 3.417A9.867 9.867 0 010 19.54a13.94 13.94 0 007.548 2.212c9.056 0 14.01-7.496 14.01-13.986 0-.213-.005-.425-.014-.636A9.936 9.936 0 0024 4.557z"/>
     </svg>
   ),
+  facebook: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden>
+      <path d="M22 12.07C22 6.48 17.52 2 11.93 2 6.58 2 2.52 5.93 2 10.99h4.02c.46-3.02 3.02-5.33 5.88-5.33 3.36 0 5.98 2.67 5.98 6v1.41h-3.9v3.21h3.9V22h-4.98v-6.79H12v-2.15h3.02V9.6c0-2.31.94-3.87 3.74-3.87 1.03 0 1.9.08 2.15.11v2.5h-1.5c-1.18 0-1.41.56-1.41 1.38v1.82H22z"/>
+    </svg>
+  ),
+  instagram: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden>
+      <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm5 5.5A4.5 4.5 0 1112 16a4.5 4.5 0 010-9zm6.5-.5a1.1 1.1 0 11-2.2 0 1.1 1.1 0 012.2 0zM12 9.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/>
+    </svg>
+  ),
+  tiktok: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden>
+      <path d="M16 3h2.5v1.7A5.3 5.3 0 0122 9.9V12h-2v-2.1a3.3 3.3 0 01-3.4-3.4V7H13v6a3 3 0 11-3-3v-2a5 5 0 107 4.58V3z"/>
+    </svg>
+  ),
 };
 
 function renderIcon(social: SocialLink) {
   const key = social.platform?.toLowerCase?.() ?? "";
+  const iconKey = (social.icon || social.platform || "").toLowerCase();
+  if (defaultIcons[iconKey]) return defaultIcons[iconKey];
   if (defaultIcons[key]) return defaultIcons[key];
 
   if (social.icon && social.icon.trim().startsWith("<svg")) {
@@ -88,6 +105,14 @@ export default function HeroSplitBanner(props: HeroSplitBannerProps) {
     color: accentColor,
   };
 
+  // Normalize socialLinks so we always work with an array. Plasmic may pass
+  // an object or keyed map when editing; convert to values if necessary.
+  const links: SocialLink[] = Array.isArray(socialLinks)
+    ? socialLinks
+    : socialLinks && typeof socialLinks === "object"
+    ? (Object.values(socialLinks) as SocialLink[])
+    : [];
+
   return (
     <section
       className={styles.container}
@@ -122,16 +147,16 @@ export default function HeroSplitBanner(props: HeroSplitBannerProps) {
           <p className={styles.tagline}>{tagline}</p>
 
           <div className={styles.socials} role="list" aria-label="Social links">
-            {socialLinks?.map((s, i) => (
+            {links.map((s, i) => (
               <a
                 key={i}
-                href={s.url}
+                href={s?.url || '#'}
                 className={styles.socialLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ borderColor: accentColor }}
                 role="listitem"
-                aria-label={s.platform}
+                aria-label={s?.platform || `social-${i}`}
               >
                 <span className={styles.iconWrapper} style={{ color: accentColor }}>
                   {renderIcon(s)}

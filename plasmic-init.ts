@@ -43,13 +43,13 @@ PLASMIC.registerComponent(HeroSplitBanner, {
     bioText: { type: "string" },
     socialLinks: {
       type: "array",
-      of: {
-        type: "object",
-        fields: {
-          platform: { type: "string" },
-          url: { type: "string" },
-          icon: { type: "string" },
-        },
+      // Plasmic expects array items to be typed via `itemType: 'object'` and
+      // `fields` describing the object's subfields.
+      itemType: "object",
+      fields: {
+        platform: { type: "string" },
+        url: { type: "string" },
+        icon: { type: "string" },
       },
     },
     backgroundColor: { type: "string" },
