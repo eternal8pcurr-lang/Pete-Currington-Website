@@ -1,11 +1,16 @@
 import { initPlasmicLoader } from "@plasmicapp/loader-nextjs";
 import * as React from 'react';
 
+// Read Plasmic token from environment (recommended) and fall back to the
+// existing token for local development. Remove the fallback before sharing
+// the repo publicly if you want to fully secure the token.
+const PLASMIC_API_TOKEN = process.env.PLASMIC_API_TOKEN || "h79jfcl649ScXuq7wUwJXuP38G4qWo7a3MBuepAuOofk7cINbXixuAC4m3oYzDe9hzzsyRH981TKeXEwGA";
+
 export const PLASMIC = initPlasmicLoader({
   projects: [
     {
       id: "kMaN8wNPwMETEFUeJ9B9N5",
-      token: "h79jfcl649ScXuq7wUwJXuP38G4qWo7a3MBuepAuOofk7cINbXixuAC4m3oYzDe9hzzsyRH981TKeXEwGA",
+      token: PLASMIC_API_TOKEN,
     },
   ],
 
