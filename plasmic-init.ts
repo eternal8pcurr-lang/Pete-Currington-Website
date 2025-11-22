@@ -1,4 +1,5 @@
 import { initPlasmicLoader } from "@plasmicapp/loader-nextjs";
+import * as React from 'react';
 
 export const PLASMIC = initPlasmicLoader({
   projects: [
@@ -54,3 +55,36 @@ PLASMIC.registerComponent(HeroSplitBanner, {
     showBio: { type: "boolean" },
   },
 });
+
+// Register a small generic error/fallback component for Plasmic Editor
+// Plasmic sometimes expects custom error components to be present in the host.
+// If your Plasmic project references other specific component names, add them here
+// or tell me the exact missing names from the browser console and I'll register them.
+const PlasmicErrorFallback: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  return React.createElement(
+    'div',
+    { style: { padding: 20, background: '#fff2f0', color: '#7a0b0b', border: '1px solid #f4c2c2' } },
+    React.createElement('strong', null, 'Plasmic host error component'),
+    React.createElement('div', null, children)
+  );
+};
+
+// @ts-ignore
+PLASMIC.registerComponent(PlasmicErrorFallback, {
+  name: 'PlasmicErrorFallback',
+  importPath: './plasmic-init',
+  props: {
+    children: { type: 'slot' },
+  },
+});
+
+// Register a few commonly-used names so Plasmic can find a fallback.
+const commonNames = ['PlasmicError', 'PreviewError', 'PlasmicPreviewError', 'ErrorBoundary'];
+for (const nm of commonNames) {
+  // @ts-ignore
+  PLASMIC.registerComponent(PlasmicErrorFallback, {
+    name: nm,
+    importPath: './plasmic-init',
+    props: { children: { type: 'slot' } },
+  });
+}
